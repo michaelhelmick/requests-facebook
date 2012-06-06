@@ -2,7 +2,7 @@ Requests-Facebook
 =================
 
 
-Requests-Facebook is a Python library to help interface with `Facebook Graph API <https://graph.facebook.com>`_
+``Requests-Facebook`` is a Python library to help interface with `Facebook Graph API <https://graph.facebook.com>`_
 
 Features
 --------
@@ -49,7 +49,7 @@ or
     
     print 'Connect with Facebook via: %s' % auth_url
 
-Once you click "Allow" be sure that there is a URL set up to handle getting finalized tokens and possibly adding them to your database to use their information at a later date.
+Once you click "Allow" be sure that there is a URL set up to handle getting finalized access_token and possibly adding it to your database to access their information at a later date.
 
 Handling the Callback
 ~~~~~~~~~~~~~~~~~~~~~
