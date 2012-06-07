@@ -4,11 +4,11 @@ from setuptools import setup
 
 setup(
     name='requests-facebook',
-    version='0.1.1',
+    version='0.2.0',
     install_requires=['requests>=0.13.0', 'simplejson'],
     author='Mike Helmick',
     author_email='mikehelmick@me.com',
-    license='MIT License',
+    license='BSD',
     url='https://github.com/michaelhelmick/requests-facebook/',
     keywords='python facebook requests graph oauth oauth2 api',
     description='A Python Library to interface with Facebook Graph API',

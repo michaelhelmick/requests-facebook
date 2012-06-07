@@ -3,7 +3,9 @@
 """ Requests-Facebook """
 
 __author__ = 'Mike Helmick <mikehelmick@me.com>'
-__version__ = '0.1.1'
+__version__ = '0.2.0'
+
+from urllib import urlencode
 
 try:
     from urlparse import parse_qsl
@@ -32,7 +34,7 @@ class FacebookClientError(Exception):
         if error_type is not None:
             self.message = '%s: %s' % (error_type, message)
 
-        Exception.__init__(self, self.message)
+        super(FacebookClientError, self).__init__(self.message)
 
 
 class FacebookAuthError(FacebookClientError):
@@ -68,7 +70,7 @@ class FacebookAPI(object):
             'display': display,
             'scope': ','.join(scope)
         }
-        return '%s?%s' % (url, self.make_qs(qs))
+        return '%s?%s' % (url, urlencode(qs))
 
     def get_access_token(self, code):
         url = 'https://graph.facebook.com/oauth/access_token'
@@ -105,9 +107,11 @@ class FacebookAPI(object):
 
         return data
 
-    def make_qs(self, qs):
-        '''Shortcut to make query string'''
-        return ''.join(['&%s=%s' % (k, v) for k, v in qs.items()])
+    def __repr__(self):
+        return u'<FacebookAPI: %s>' % self.client_id
+
+    def __str__(self):
+        return u'<FacebookAPI: %s>' % self.client_id
 
 
 class GraphAPI(object):
@@ -122,14 +126,12 @@ class GraphAPI(object):
         return self.request(endpoint, params=params)
 
     def post(self, endpoint, params=None, files=None):
-        return self.request(endpoint, method='POST', params=params,
-                            files=files)
+        return self.request(endpoint, method='POST', params=params)
 
     def delete(self, endpoint, params=None):
         return self.request(endpoint, method='DELETE', params=params)
 
-    def request(self, endpoint, method='GET', params=None, files=None):
-        files = files or {}
+    def request(self, endpoint, method='GET', params=None):
         params = params or {}
 
         url = self.api_url + endpoint + '?access_token=' + self.access_token
@@ -138,11 +140,7 @@ class GraphAPI(object):
         if not method in ('get', 'post', 'delete'):
             raise FacebookClientError('Method must be of GET, POST or DELETE')
 
-        files_to_post = {}
-        if files is not None:
-            for item in files:
-                for k, v in item.items():
-                    files_to_post[k] = (v, open(v, 'rb'))
+        params, files = self._split_params_and_files(params)
 
         func = getattr(requests, method)
         try:
@@ -151,7 +149,7 @@ class GraphAPI(object):
             else:
                 response = func(url,
                                 data=params,
-                                files=files_to_post,
+                                files=files,
                                 headers=self.headers)
 
         except requests.exceptions.RequestException:
@@ -171,3 +169,18 @@ class GraphAPI(object):
                 raise GraphAPIError(error_message, error_type=error_type)
 
         return content
+
+    def _split_params_and_files(self, params_):
+        params = {}
+        files = {}
+        for k, v in params_.items():
+            if hasattr(v, 'read') and callable(v.read):
+                files[k] = v
+            elif isinstance(v, basestring):
+                params[k] = v
+            else:
+                continue
+        return params, files
+
+    def __repr__(self):
+        return u'<GraphAPI: %s>' % self.access_token

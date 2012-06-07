@@ -122,8 +122,8 @@ Creating a Photo Album
     new_album = graph.post('me/albums', params={'name':'Test Album'})
     print new_album
 
-Creating a post with a photo
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Posting a Photo
+~~~~~~~~~~~~~~~
 ::
 
     # Assume you are using the GraphAPI instance from the previous section
@@ -132,11 +132,52 @@ Creating a post with a photo
     # new_album = new_album var from the previous section
     album_id = new_album['id']
 
-    # Files is a list of dicts in the case that you can upload multiple files
-    files = [{'source':'/path/to/file/image.png'}]
-    new_photo = graph.post('%s/photos' % album_id, params={'message':'My photo caption!'}, files=files)
+    photo = open('path/to/file/image.jpg', 'rb')
+
+    # The file key that Facebook expects is 'source', so 'source' will be apart
+    # of the params dict.
+
+    # You can pass any object that has a read() function (like a StringIO object)
+    # In case you wanted to resize it first or something!
+
+    new_photo = graph.post('%s/photos' % album_id, params={'message':'My photo caption!', 'source': photo})
 
     print new_photo
+
+
+Posting an Edited Photo *(This example resizes a photo)*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+::
+
+    # Assume you are using the GraphAPI instance from the previous section
+    # Assume you are using the album you just created in the previous sections
+
+    # Like I said in the previous section, you can pass any object that has a
+    # read() method
+
+    # Assume you are working with a JPEG
+
+    from PIL import Image
+    from StringIO import StringIO
+
+    photo = Image.open('/path/to/file/image.jpg')
+
+    basewidth = 320
+    wpercent = (basewidth / float(photo.size[0]))
+    height = int((float(photo.size[1]) * float(wpercent)))
+    photo = photo.resize((basewidth, height), Image.ANTIALIAS)
+
+    image_io = StringIO.StringIO()
+    photo.save(image_io, format='JPEG')
+    
+    image_io.seek(0)
+
+    try:
+        new_photo = graph.post('%s/photos' % album_id, params={'message':'My photo caption!', 'source': photo})
+    except FacebookClientError, e:
+        # Maybe the file was invalid?
+        print e.message
+
 
 Catching errors **(In case you didn't catch it in the first example)**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
