@@ -26,6 +26,19 @@ except ImportError:
 import requests
 
 
+def _split_params_and_files(params_):
+        params = {}
+        files = {}
+        for k, v in params_.items():
+            if hasattr(v, 'read') and callable(v.read):
+                files[k] = v
+            elif isinstance(v, basestring):
+                params[k] = v
+            else:
+                continue
+        return params, files
+
+
 class FacebookClientError(Exception):
     def __init__(self, message, error_type=None):
         self.type = error_type
@@ -110,9 +123,6 @@ class FacebookAPI(object):
     def __repr__(self):
         return u'<FacebookAPI: %s>' % self.client_id
 
-    def __str__(self):
-        return u'<FacebookAPI: %s>' % self.client_id
-
 
 class GraphAPI(object):
     def __init__(self, access_token=None, headers=None):
@@ -140,7 +150,7 @@ class GraphAPI(object):
         if not method in ('get', 'post', 'delete'):
             raise FacebookClientError('Method must be of GET, POST or DELETE')
 
-        params, files = self._split_params_and_files(params)
+        params, files = _split_params_and_files(params)
 
         func = getattr(requests, method)
         try:
@@ -169,18 +179,6 @@ class GraphAPI(object):
                 raise GraphAPIError(error_message, error_type=error_type)
 
         return content
-
-    def _split_params_and_files(self, params_):
-        params = {}
-        files = {}
-        for k, v in params_.items():
-            if hasattr(v, 'read') and callable(v.read):
-                files[k] = v
-            elif isinstance(v, basestring):
-                params[k] = v
-            else:
-                continue
-        return params, files
 
     def __repr__(self):
         return u'<GraphAPI: %s>' % self.access_token
