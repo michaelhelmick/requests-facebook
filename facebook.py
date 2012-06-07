@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+__all__ = ('FacebookAPI', 'GraphAPI', 'FacebookClientError', \
+            'FacebookAuthError', 'FacebookAPIError', 'GraphAPIError')
 
 """ Requests-Facebook """
 
