@@ -3,7 +3,7 @@
 """ Requests-Facebook """
 
 __author__ = 'Mike Helmick <mikehelmick@me.com>'
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 try:
     from urlparse import parse_qsl
@@ -146,11 +146,13 @@ class GraphAPI(object):
 
         func = getattr(requests, method)
         try:
-            response = func(url,
-                            data=params,
-                            params=params,
-                            files=files_to_post,
-                            headers=self.headers)
+            if method == 'get':
+                response = func(url, params=params, headers=self.headers)
+            else:
+                response = func(url,
+                                data=params,
+                                files=files_to_post,
+                                headers=self.headers)
 
         except requests.exceptions.RequestException:
             raise FacebookClientError('An unknown error occurred.')

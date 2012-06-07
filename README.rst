@@ -2,7 +2,7 @@ Requests-Facebook
 =================
 
 
-``Requests-Facebook`` is a Python library to help interface with `Facebook Graph API <https://graph.facebook.com>`_
+``Requests-Facebook`` is a Python library to help interface with `Facebook Graph API <https://graph.facebook.com>`_ using the awesome ``requests`` library by `@kennethreitz <https://github.com/kennethreitz>`_
 
 Features
 --------
