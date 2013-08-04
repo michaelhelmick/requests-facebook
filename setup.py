@@ -7,7 +7,7 @@ setup(
     version='0.2.0',
     install_requires=['requests>=0.13.0', 'simplejson'],
     author='Mike Helmick',
-    author_email='mikehelmick@me.com',
+    author_email='me@michaelhelmick.com',
     license='BSD',
     url='https://github.com/michaelhelmick/requests-facebook/',
     keywords='python facebook requests graph oauth oauth2 api',
