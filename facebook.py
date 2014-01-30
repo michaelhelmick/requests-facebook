@@ -7,6 +7,7 @@ __author__ = 'Mike Helmick <mikehelmick@me.com>'
 __version__ = '0.2.0'
 
 from urllib import urlencode
+import requests
 
 try:
     from urlparse import parse_qsl
@@ -14,17 +15,8 @@ except ImportError:
     from cgi import parse_qsl
 
 try:
-    import simplejson as json
-except ImportError:
     try:
-        import json
-    except ImportError:
-        try:
-            from django.utils import simplejson as json
-        except ImportError:
-            raise ImportError('A json library is required to use this python library. Lol, yay for being verbose. ;)')
 
-import requests
 
 
 def _split_params_and_files(params_):
@@ -101,7 +93,7 @@ class FacebookAPI(object):
 
         if status_code != 200:
             try:
-                content = json.loads(content)
+                content = response.json()
             except ValueError:
                 raise FacebookClientError('Unable to parse response, invalid JSON.')
 
@@ -167,7 +159,7 @@ class GraphAPI(object):
             raise FacebookClientError('An unknown error occurred.')
 
         try:
-            content = json.loads(response.content)
+            content = response.json()
         except ValueError:
             raise FacebookClientError('Unable to parse response, invalid JSON.')
 
