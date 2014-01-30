@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='requests-facebook',
-    version='0.2.0',
+    version='0.2.1',
     install_requires=['requests>=1.0.0'],
     author='Mike Helmick',
     author_email='me@michaelhelmick.com',
