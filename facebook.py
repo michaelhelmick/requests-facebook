@@ -1,30 +1,30 @@
-__all__ = ('FacebookAPI', 'GraphAPI', 'FacebookClientError', \
-            'FacebookAuthError', 'FacebookAPIError', 'GraphAPIError')
+__all__ = ('FacebookAPI', 'GraphAPI', 'FacebookClientError',
+           'FacebookAuthError', 'FacebookAPIError', 'GraphAPIError')
 
 """ Requests-Facebook """
 
 __author__ = 'Mike Helmick <mikehelmick@me.com>'
-__version__ = '0.2.0'
-
-from urllib import urlencode
-
-try:
-    from urlparse import parse_qsl
-except ImportError:
-    from cgi import parse_qsl
-
-try:
-    import simplejson as json
-except ImportError:
-    try:
-        import json
-    except ImportError:
-        try:
-            from django.utils import simplejson as json
-        except ImportError:
-            raise ImportError('A json library is required to use this python library. Lol, yay for being verbose. ;)')
+__version__ = '0.2.1'
 
 import requests
+
+try:
+    from urllib.parse import urlencode
+except ImportError:  # Python 2
+    from urllib import urlencode
+
+try:
+    from urllib.parse import parse_qsl
+except ImportError:  # Python 2
+    try:
+        from urlparse import parse_qsl
+    except ImportError:  # Python < 2.6
+        from cgi import parse_qsl
+
+try:
+    string_types = basestring
+except NameError:
+    string_types = str
 
 
 def _split_params_and_files(params_):
@@ -33,7 +33,7 @@ def _split_params_and_files(params_):
         for k, v in params_.items():
             if hasattr(v, 'read') and callable(v.read):
                 files[k] = v
-            elif isinstance(v, basestring):
+            elif isinstance(v, string_types):
                 params[k] = v
             else:
                 continue
@@ -101,7 +101,7 @@ class FacebookAPI(object):
 
         if status_code != 200:
             try:
-                content = json.loads(content)
+                content = response.json()
             except ValueError:
                 raise FacebookClientError('Unable to parse response, invalid JSON.')
 
@@ -167,7 +167,7 @@ class GraphAPI(object):
             raise FacebookClientError('An unknown error occurred.')
 
         try:
-            content = json.loads(response.content)
+            content = response.json()
         except ValueError:
             raise FacebookClientError('Unable to parse response, invalid JSON.')
 
