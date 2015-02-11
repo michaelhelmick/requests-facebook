@@ -64,7 +64,7 @@ Handling the Callback
 
     access_token = f.get_access_token(code)
     
-    final_access_token = access_token['oauth_token']
+    final_access_token = access_token['access_token']
     
     # Save that token to the database for a later use?
 
