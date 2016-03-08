@@ -41,12 +41,14 @@ def _split_params_and_files(params_):
 
 
 class FacebookClientError(Exception):
-    def __init__(self, message, error_type=None):
+    def __init__(self, message, error_type=None, error_code=None):
         self.type = error_type
 
         self.message = message
         if error_type is not None:
             self.message = '%s: %s' % (error_type, message)
+
+        self.code = error_code
 
         super(FacebookClientError, self).__init__(self.message)
 
@@ -109,8 +111,9 @@ class FacebookAPI(object):
                 error = content['error']
                 error_type = error.get('type', '')
                 error_message = error.get('message', '')
+                error_code = error.get('code')
 
-                raise FacebookAuthError(error_message, error_type=error_type)
+                raise FacebookAuthError(error_message, error_type=error_type, error_code=error_code)
             else:
                 raise FacebookClientError('An unknown error occurred.')
 
@@ -176,8 +179,9 @@ class GraphAPI(object):
                 error = content['error']
                 error_type = error.get('type', '')
                 error_message = error.get('message', '')
+                error_code = error.get('code')
 
-                raise GraphAPIError(error_message, error_type=error_type)
+                raise GraphAPIError(error_message, error_type=error_type, error_code=error_code)
 
         return content
 
