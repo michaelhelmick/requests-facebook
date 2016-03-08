@@ -4,7 +4,7 @@ __all__ = ('FacebookAPI', 'GraphAPI', 'FacebookClientError',
 """ Requests-Facebook """
 
 __author__ = 'Mike Helmick <mikehelmick@me.com>'
-__version__ = '0.2.1'
+__version__ = '0.3.0'
 
 import requests
 
