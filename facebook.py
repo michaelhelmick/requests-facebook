@@ -129,8 +129,11 @@ class FacebookAPI(object):
 
 
 class GraphAPI(object):
-    def __init__(self, access_token=None, headers=None):
+    def __init__(self, access_token=None, headers=None, api_version='v2.6'):
         self.api_url = 'https://graph.facebook.com/'
+        self.api_version = api_version
+        if self.api_version:
+            self.api_url = '%s%s/' % (self.api_url, self.api_version)
         self.access_token = access_token
 
         # If there's headers, set them. If not, lets
