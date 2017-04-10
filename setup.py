@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setuptools
 
 setup(
     name='requests-facebook',
