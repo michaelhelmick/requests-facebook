@@ -118,6 +118,8 @@ class FacebookAPI(object):
                 raise FacebookClientError('An unknown error occurred.')
 
         try:
+            data = response.json()
+        except ValueError:
             data = dict(parse_qsl(content))
         except AttributeError:
             raise FacebookAuthError('Unable to obtain access token.')
