@@ -7,8 +7,8 @@ except ImportError:
 
 setup(
     name='requests-facebook',
-    version='0.4.1',
-    install_requires=['requests>=1.0.0'],
+    version='0.4.2',
+    install_requires=['requests>=2.18.4'],
     author='Mike Helmick',
     author_email='me@michaelhelmick.com',
     license='BSD',
