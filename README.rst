@@ -2,13 +2,13 @@ Requests-Facebook
 =================
 
 
-``Requests-Facebook`` is a Python library to help interface with `Facebook Graph API <https://graph.facebook.com>`_ using the awesome ``requests`` library by `@kennethreitz <https://github.com/kennethreitz>`_
+``Requests-Facebook`` is a Python library to help interface with the `Facebook Graph API <https://graph.facebook.com>`_ using the awesome ``requests`` library by `@kennethreitz <https://github.com/kennethreitz>`_
 
 Features
 --------
 
 * Authenticating Users
-* Dyanmic Facebook methods
+* Dynamic Facebook methods
    - Read home feeds/user feeds
    - Post status updates
    - Delete items
@@ -72,7 +72,7 @@ Handling the Callback
 Dynamic Facebook methods
 ~~~~~~~~~~~~~~~~~~~~~~~~
 Say you have the url ``https://graph.facebook.com/me/friends``
-To make a call via this library, you'd do GraphAPI.get('me/friends')
+To make a call via this library, you'd do ``GraphAPI.get('me/friends')``
 
 You just take everything in the url *AFTER* ``https://graph.facebook.com/``
 
